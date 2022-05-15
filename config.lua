@@ -1,3 +1,5 @@
+--[[ Fixed and Writed By Over & Sex Community]]
+
 Config = {
     Locales = {
         ["checkout"] = "Buy Item"
