@@ -1,3 +1,5 @@
+--[[ Fixed and Writed By Over & Sex Community]]
+
 Citizen.CreateThread(function()
     while true do
         local wait = 750
