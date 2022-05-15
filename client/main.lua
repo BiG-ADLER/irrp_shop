@@ -1,3 +1,5 @@
+--[[ Fixed and Writed By Over & Sex Community]]
+
 ESX = nil
 
 Keys = {["E"] = 38, ["L"] = 182, ["G"] = 47}
