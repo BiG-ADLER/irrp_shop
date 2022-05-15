@@ -1,7 +1,7 @@
 fx_version 'bodacious'
 game 'gta5'
 
-author 'Over-Community'
+author 'Over-Community & Sex-Community'
 version '2.0.0'
 description 'New Shop System With Cool Options and UI'
 
