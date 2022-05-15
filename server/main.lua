@@ -1,3 +1,5 @@
+--[[ Fixed and Writed By Over & Sex Community]]
+
 ESX = nil 
 TriggerEvent("esx:getSharedObject", function(obj)
     ESX = obj
