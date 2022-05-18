@@ -14,6 +14,8 @@ Config = {
     ESX = "esx:getSharedObject"
 }
 
+
+
 Locations = {
     [1] = {
         ["shelfs"] = {

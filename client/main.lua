@@ -570,7 +570,7 @@ Citizen.CreateThread(function()
                 DisplayHelpText("Dokme ~INPUT_MP_TEXT_CHAT_TEAM~ ra jahat dozdi feshar dahid ~b~")
                 if IsControlPressed(1, 246) then
                     local doing = true
-                    ESX.TriggerServerCallback('Over_ShopRobbery:canPickUpMoney', function(can)
+                    ESX.TriggerServerCallback('irrp_shop:canPickUpMoney', function(can)
                         if can then
                             TaskTurnPedToFaceEntity(PlayerPedId(),ccobject, 4000)
                             Wait(500)
@@ -600,7 +600,7 @@ Citizen.CreateThread(function()
                                       if not status then
                                           CreateModelSwap(GetEntityCoords(ccobject), 0.5, GetHashKey('prop_till_01'), GetHashKey('prop_till_01_dam'), false)
                                           ClearPedTasks(PlayerPedId())
-                                          TriggerServerEvent('Over_ShopRobbery:pickUp', shopId)
+                                          TriggerServerEvent('irrp_shop:pickUp', shopId)
                                           doing = false
                                           SetTimeout(25 * 1000 * 60, function()
                                               CreateModelSwap(GetEntityCoords(ccobject), 0.5, GetHashKey('prop_till_01_dam'), GetHashKey('prop_till_01'), false)
@@ -689,9 +689,9 @@ Citizen.CreateThread(function()
                 if isRegistered then
                     local returnValue, currentPedWeapon = GetCurrentPedWeapon(PlayerPedId(),1)
                     if returnValue == 1 and GetWeaponDamageType(currentPedWeapon) == 3 and HasEntityClearLosToEntity(PlayerPedId(), entity, 17) then
-                        TriggerServerEvent("Over_ShopRobbery:syncAiming", shopId)
+                        TriggerServerEvent("irrp_shop:syncAiming", shopId)
                         local canRob = nil
-                        ESX.TriggerServerCallback('Over_ShopRobbery:canRob', function(cb)
+                        ESX.TriggerServerCallback('irrp_shop:canRob', function(cb)
                             canRob = cb
                         end, shopId)
                         while canRob == nil do
@@ -700,7 +700,7 @@ Citizen.CreateThread(function()
                         if canRob == true and currentPedEnt == nil then
                             if currentPedEnt == nil then
                                 currentPedEnt = entity
-                                TriggerServerEvent("Over_ShopRobbery:sendNpcToAnim", shopId)
+                                TriggerServerEvent("irrp_shop:sendNpcToAnim", shopId)
                                 while currentPedEnt do
                                     retval, entity = GetEntityPlayerIsFreeAimingAt(PlayerId())
                                     if not retval then
@@ -724,16 +724,16 @@ Citizen.CreateThread(function()
     end
 end)
 
-RegisterNetEvent('Over_ShopRobbery:resetShopNPCAnim')
-AddEventHandler('Over_ShopRobbery:resetShopNPCAnim', function(storeId)
+RegisterNetEvent('irrp_shop:resetShopNPCAnim')
+AddEventHandler('irrp_shop:resetShopNPCAnim', function(storeId)
     local entity = Locations[storeId]["cashier"]["entity"]
     if entity and DoesEntityExist(entity) then
         ClearPedTasks(entity)
     end
 end)
 
-RegisterNetEvent('Over_ShopRobbery:fetchNpcAnim')
-AddEventHandler('Over_ShopRobbery:fetchNpcAnim', function(storeId)
+RegisterNetEvent('irrp_shop:fetchNpcAnim')
+AddEventHandler('irrp_shop:fetchNpcAnim', function(storeId)
     local entity = Locations[storeId]["cashier"]["entity"]
     if entity and DoesEntityExist(entity) then
         loadDict('missheist_agency2ahands_up')

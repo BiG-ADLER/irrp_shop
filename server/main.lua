@@ -489,7 +489,7 @@ Citizen.CreateThread(function()
     end
 end)
 
-ESX.RegisterServerCallback('Over_ShopRobbery:canPickUpMoney', function(source, cb, shopId)
+ESX.RegisterServerCallback('irrp_shop:canPickUpMoney', function(source, cb, shopId)
     local store = Stores[shopId]
     if store.isAiming then
         cb(true)
@@ -498,7 +498,7 @@ ESX.RegisterServerCallback('Over_ShopRobbery:canPickUpMoney', function(source, c
     end
 end)
 
-ESX.RegisterServerCallback('Over_ShopRobbery:canRob', function(source, cb, shopId)
+ESX.RegisterServerCallback('irrp_shop:canRob', function(source, cb, shopId)
     local store = Stores[shopId]
     if police >= Config.police then
         if (os.time() - store.lastRobbed) < 1000 and store.lastRobbed ~= 0 then
@@ -511,13 +511,13 @@ ESX.RegisterServerCallback('Over_ShopRobbery:canRob', function(source, cb, shopI
     end
 end)
 
-RegisterServerEvent("Over_ShopRobbery:sendNpcToAnim")
-AddEventHandler("Over_ShopRobbery:sendNpcToAnim", function(shopNum)
-    TriggerClientEvent("Over_ShopRobbery:fetchNpcAnim", -1, shopNum)
+RegisterServerEvent("irrp_shop:sendNpcToAnim")
+AddEventHandler("irrp_shop:sendNpcToAnim", function(shopNum)
+    TriggerClientEvent("irrp_shop:fetchNpcAnim", -1, shopNum)
 end)
 
-RegisterServerEvent("Over_ShopRobbery:pickUp")
-AddEventHandler("Over_ShopRobbery:pickUp", function(shopNum)
+RegisterServerEvent("irrp_shop:pickUp")
+AddEventHandler("irrp_shop:pickUp", function(shopNum)
     _Source = source
     Wait(math.random(200, 1000))
     local store = Stores[shopNum]
@@ -525,7 +525,7 @@ AddEventHandler("Over_ShopRobbery:pickUp", function(shopNum)
         store.lastRobbed = os.time()
         local xPlayer = ESX.GetPlayerFromId(_Source)
         xPlayer.addInventoryItem("dirtymoney", RobShop(shopNum))
-        TriggerClientEvent("Over_ShopRobbery:resetShopNPCAnim", -1, shopNum)
+        TriggerClientEvent("irrp_shop:resetShopNPCAnim", -1, shopNum)
         SetTimeout(20 * 60 * 1000, function()
             store.isAiming = false
             store.lastRobbed = 0
@@ -533,8 +533,8 @@ AddEventHandler("Over_ShopRobbery:pickUp", function(shopNum)
     end
 end)
 
-RegisterServerEvent("Over_ShopRobbery:syncAiming")
-AddEventHandler("Over_ShopRobbery:syncAiming", function(shopNum)
+RegisterServerEvent("irrp_shop:syncAiming")
+AddEventHandler("irrp_shop:syncAiming", function(shopNum)
     local store = Stores[shopNum]
     store.isAiming = true
     SetTimeout(10000, function()
