@@ -1,7 +1,7 @@
 --[[ Fixed and Writed By Over & Sex Community]]
 
 ESX = nil 
-TriggerEvent("esx:getSharedObject", function(obj)
+TriggerEvent(Config.ESX, function(obj)
     ESX = obj
 end)
 
@@ -44,8 +44,8 @@ MySQL.ready(function()
     end
 end)
 
-RegisterNetEvent('Over_shop:buyItem')
-AddEventHandler('Over_shop:buyItem', function(item, count, shopNumber)
+RegisterNetEvent('irrp_shop:buyItem')
+AddEventHandler('irrp_shop:buyItem', function(item, count, shopNumber)
     local src = source
     local xPlayer = ESX.GetPlayerFromId(src)
     local price = 0
@@ -88,14 +88,14 @@ AddEventHandler('Over_shop:buyItem', function(item, count, shopNumber)
     end
 end)
 
-ESX.RegisterServerCallback('Over_shop:getShops', function(source, cb)
+ESX.RegisterServerCallback('irrp_shop:getShops', function(source, cb)
     MySQL.Async.fetchAll('SELECT * FROM owned_shops', 
     {}, function(data)
         cb(data)
     end)
 end)
 
-ESX.RegisterServerCallback('Over_shop:depositmoney', function(source, cb, shopNumber)
+ESX.RegisterServerCallback('irrp_shop:depositmoney', function(source, cb, shopNumber)
     local xPlayer = ESX.GetPlayerFromId(source)
     local identifier = xPlayer.identifier
     if shops[shopNumber].owner.identifier == identifier then
@@ -116,7 +116,7 @@ ESX.RegisterServerCallback('Over_shop:depositmoney', function(source, cb, shopNu
     end
 end)
 
-ESX.RegisterServerCallback('Over_shop:getinventory', function(source, cb, shopNumber)
+ESX.RegisterServerCallback('irrp_shop:getinventory', function(source, cb, shopNumber)
     local xPlayer = ESX.GetPlayerFromId(source)
     local identifier = xPlayer.identifier
     if shops[shopNumber].owner.identifier == identifier then
@@ -130,7 +130,7 @@ ESX.RegisterServerCallback('Over_shop:getinventory', function(source, cb, shopNu
     end
 end)
 
-ESX.RegisterServerCallback('Over_shop:getbuyprices', function(source, cb)
+ESX.RegisterServerCallback('irrp_shop:getbuyprices', function(source, cb)
     local xPlayer = ESX.GetPlayerFromId(source)
     local identifier = xPlayer.identifier
     if isOwnerOfAnyShop(identifier) then
@@ -140,16 +140,16 @@ ESX.RegisterServerCallback('Over_shop:getbuyprices', function(source, cb)
     end
 end)
 
-ESX.RegisterServerCallback('Over_shop:getShopItemPrices', function(source, cb)
+ESX.RegisterServerCallback('irrp_shop:getShopItemPrices', function(source, cb)
     cb(items)
 end)
 
-ESX.RegisterServerCallback('Over_shop:changename', function(source, cb, shopNumber, shopName)
+ESX.RegisterServerCallback('irrp_shop:changename', function(source, cb, shopNumber, shopName)
     local xPlayer = ESX.GetPlayerFromId(source)
     local identifier = xPlayer.identifier
     if shops[shopNumber].owner.identifier == identifier then
         shops[shopNumber].name = shopName
-        TriggerClientEvent('Over_shop:clChangeName', -1, shopNumber, shopName)
+        TriggerClientEvent('irrp_shop:clChangeName', -1, shopNumber, shopName)
         cb(shopName)
         MySQL.Async.execute('UPDATE owned_shops SET `name` = @name WHERE number = @shopnumber', {
             ['@shopnumber'] = shopNumber,
@@ -160,7 +160,7 @@ ESX.RegisterServerCallback('Over_shop:changename', function(source, cb, shopNumb
     end
 end)
 
-ESX.RegisterServerCallback('Over_shop:buyStock', function(source, cb, stock)
+ESX.RegisterServerCallback('irrp_shop:buyStock', function(source, cb, stock)
     local xPlayer = ESX.GetPlayerFromId(source)
     local identifier = xPlayer.identifier
     if isOwnerOfAnyShop(identifier) then
@@ -179,7 +179,7 @@ ESX.RegisterServerCallback('Over_shop:buyStock', function(source, cb, stock)
     end
 end)
 
-ESX.RegisterServerCallback('Over_shop:putStock', function(source, cb, shopNumber, stock)
+ESX.RegisterServerCallback('irrp_shop:putStock', function(source, cb, shopNumber, stock)
     local xPlayer = ESX.GetPlayerFromId(source)
 
     local identifier = xPlayer.identifier
@@ -206,7 +206,7 @@ ESX.RegisterServerCallback('Over_shop:putStock', function(source, cb, shopNumber
     end
 end)
 
-ESX.RegisterServerCallback('Over_shop:buyShop', function(source, cb, shopNumber)
+ESX.RegisterServerCallback('irrp_shop:buyShop', function(source, cb, shopNumber)
     local xPlayer = ESX.GetPlayerFromId(source)
 
     local identifier = xPlayer.identifier
@@ -236,7 +236,7 @@ ESX.RegisterServerCallback('Over_shop:buyShop', function(source, cb, shopNumber)
         end
         shops[shopNumber].owner.name = xPlayer.name
         shops[shopNumber].owner.identifier = xPlayer.identifier
-        TriggerClientEvent('Over_shop:clChangedata', -1, shopNumber, {name =  shops[shopNumber].owner.name, identifier = shops[shopNumber].owner.identifier, forsale = shops[shopNumber].shop.forsale, id = source})
+        TriggerClientEvent('irrp_shop:clChangedata', -1, shopNumber, {name =  shops[shopNumber].owner.name, identifier = shops[shopNumber].owner.identifier, forsale = shops[shopNumber].shop.forsale, id = source})
 
         cb(shopNumber)
 
@@ -256,7 +256,7 @@ ESX.RegisterServerCallback('Over_shop:buyShop', function(source, cb, shopNumber)
     end
 end)
 
-ESX.RegisterServerCallback('Over_shop:getstatus', function(source, cb, shopNumber)
+ESX.RegisterServerCallback('irrp_shop:getstatus', function(source, cb, shopNumber)
     local xPlayer = ESX.GetPlayerFromId(source)
 
     local identifier = xPlayer.identifier
@@ -267,7 +267,7 @@ ESX.RegisterServerCallback('Over_shop:getstatus', function(source, cb, shopNumbe
     end
 end)
 
-ESX.RegisterServerCallback('Over_shop:setstatus', function(source, cb, shopNumber, value, type)
+ESX.RegisterServerCallback('irrp_shop:setstatus', function(source, cb, shopNumber, value, type)
     local xPlayer = ESX.GetPlayerFromId(source)
 
     local identifier = xPlayer.identifier
@@ -275,7 +275,7 @@ ESX.RegisterServerCallback('Over_shop:setstatus', function(source, cb, shopNumbe
     
        if type == "price" then
           shops[shopNumber].shop.value = value
-          TriggerClientEvent('Over_shop:clChangedataCustom', -1, shopNumber, {type = "price", value = shops[shopNumber].shop.value})
+          TriggerClientEvent('irrp_shop:clChangedataCustom', -1, shopNumber, {type = "price", value = shops[shopNumber].shop.value})
           cb(shops[shopNumber].shop.value)
           MySQL.Async.execute('UPDATE owned_shops SET `value` = @value WHERE number = @shopnumber', {
             ['@shopnumber'] = shopNumber,
@@ -287,7 +287,7 @@ ESX.RegisterServerCallback('Over_shop:setstatus', function(source, cb, shopNumbe
           else
             shops[shopNumber].shop.forsale = true
           end
-          TriggerClientEvent('Over_shop:clChangedataCustom', -1, shopNumber, {type = "status", forsale = shops[shopNumber].shop.forsale})
+          TriggerClientEvent('irrp_shop:clChangedataCustom', -1, shopNumber, {type = "status", forsale = shops[shopNumber].shop.forsale})
           MySQL.Async.execute('UPDATE owned_shops SET `value` = @value WHERE number = @shopnumber', {
             ['@shopnumber'] = shopNumber,
             ['@value'] = json.encode(shops[shopNumber].shop)
@@ -320,7 +320,7 @@ AddEventHandler('esx:playerLoaded', function(source)
     end
     
     if ownedShops ~= {} then
-        TriggerClientEvent('Over_shop:passTheShops', source, ownedShops)
+        TriggerClientEvent('irrp_shop:passTheShops', source, ownedShops)
     end
 
 end)
@@ -342,7 +342,7 @@ AddEventHandler('onResourceStart', function(resourceName)
             end
 
             if ownedShops ~= {} then
-                TriggerClientEvent('Over_shop:passTheShops', xPlayer.source, ownedShops)
+                TriggerClientEvent('irrp_shop:passTheShops', xPlayer.source, ownedShops)
             end
 
         end

@@ -30,7 +30,7 @@ end)
 
 function OpenShopUi(number)
     local data = {}
-    ESX.TriggerServerCallback('Over_shop:getShopItemPrices', function(items)
+    ESX.TriggerServerCallback('irrp_shop:getShopItemPrices', function(items)
         for k, v in pairs(items) do
             table.insert(data, {name = k, label = v.label, price = v.price, image = k})
         end
@@ -51,12 +51,12 @@ end)
 
 RegisterNUICallback("purchase", function(data)
     if tonumber(data.shop) == 0 then
-        ESX.TriggerServerCallback('Over_shop:buyStock', function(success)
+        ESX.TriggerServerCallback('irrp_shop:buyStock', function(success)
             if success then
                 ESX.ShowNotification("~h~You have sussecfully buy ~o~x" .. success.count .. " " .. success.item .. "~w~ as price : ~g~$" .. success.price)
             end
         end, {item = data.name, count = tonumber(data.count)})
     else
-        TriggerServerEvent("Over_shop:buyItem", data.name, tonumber(data.count), tonumber(data.shop))
+        TriggerServerEvent("irrp_shop:buyItem", data.name, tonumber(data.count), tonumber(data.shop))
     end
 end)

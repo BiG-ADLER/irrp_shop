@@ -24,9 +24,9 @@ function loadShit(items) {
 function buyItem(name,quantity) {
     if(isNaN(parseInt(quantity))) quantity = 1;
     var obj = { name: name, count: quantity, shop: shopNumber };
-    $.post("http://esx_shop/purchase", JSON.stringify(obj), function () { });
+    $.post("http://irrp_shop/purchase", JSON.stringify(obj), function () { });
 }
 function Exit() {
     $('.auto-insurance').fadeOut();
-    $.post("http://esx_shop/close", true, function () { });
+    $.post("http://irrp_shop/close", true, function () { });
 }

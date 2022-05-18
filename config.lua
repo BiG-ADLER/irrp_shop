@@ -9,7 +9,9 @@ Config = {
         pos = {x = 46.16, y = -1749.16, z = 28.64}
     },
 
-    police = 0
+    police = 0,
+
+    ESX = "esx:getSharedObject"
 }
 
 Locations = {

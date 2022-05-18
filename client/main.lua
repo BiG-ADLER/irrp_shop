@@ -25,10 +25,10 @@ end)
 
 Citizen.CreateThread(function()
     while ESX == nil do
-        TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
+        TriggerEvent(Config.ESX, function(obj) ESX = obj end)
         Citizen.Wait(0)
     end
-    ESX.TriggerServerCallback('Over_shop:getShops', function(shops)
+    ESX.TriggerServerCallback('irrp_shop:getShops', function(shops)
         for i=1, #shops do
            Locations[shops[i].number]["owner"] = json.decode(shops[i].owner)
            Locations[shops[i].number]["shop"] = json.decode(shops[i].value)
@@ -75,21 +75,21 @@ DeleteCashier = function()
     end
 end
 
-RegisterNetEvent('Over_shop:passTheShops')
-AddEventHandler('Over_shop:passTheShops', function (ownedShops)
+RegisterNetEvent('irrp_shop:passTheShops')
+AddEventHandler('irrp_shop:passTheShops', function (ownedShops)
     for i=1, #ownedShops, 1 do
         Locations[ownedShops[i]].boss.owner = true
     end
 end)
 
-RegisterNetEvent('Over_shop:clChangeName')
-AddEventHandler('Over_shop:clChangeName', function (shopNumber, shopName)
+RegisterNetEvent('irrp_shop:clChangeName')
+AddEventHandler('irrp_shop:clChangeName', function (shopNumber, shopName)
     Locations[shopNumber].blip.name = shopName
     CreateBlips()
 end)
 
-RegisterNetEvent('Over_shop:clChangedata')
-AddEventHandler('Over_shop:clChangedata', function (shopNumber, data)
+RegisterNetEvent('irrp_shop:clChangedata')
+AddEventHandler('irrp_shop:clChangedata', function (shopNumber, data)
     Locations[shopNumber].shop.forsale = data.forsale
     Locations[shopNumber].owner.identifier = data.identifier
     Locations[shopNumber].owner.name = data.name
@@ -100,8 +100,8 @@ AddEventHandler('Over_shop:clChangedata', function (shopNumber, data)
     end
 end)
 
-RegisterNetEvent('Over_shop:clChangedataCustom')
-AddEventHandler('Over_shop:clChangedataCustom', function (shopNumber, data)
+RegisterNetEvent('irrp_shop:clChangedataCustom')
+AddEventHandler('irrp_shop:clChangedataCustom', function (shopNumber, data)
     if data.type == "price" then
         Locations[shopNumber].shop.value = data.value
     elseif data.type == "status" then
@@ -227,12 +227,12 @@ Citizen.CreateThread(function()
     end
 end)
 
-AddEventHandler('Over_shop:hasEnteredMarker', function(zone)
+AddEventHandler('irrp_shop:hasEnteredMarker', function(zone)
 	CurrentAction     = zone
 	CurrentActionMsg  = 'Press ~INPUT_CONTEXT~ to open menu!'
 end)
 
-AddEventHandler('Over_shop:hasExitedMarker', function(zone)
+AddEventHandler('irrp_shop:hasExitedMarker', function(zone)
 	CurrentAction = nil
 end)
 
@@ -261,12 +261,12 @@ Citizen.CreateThread(function()
 		if (isInMarker and not HasAlreadyEnteredMarker) or (isInMarker and LastZone ~= currentZone) then
 			HasAlreadyEnteredMarker = true
 			LastZone                = currentZone
-			TriggerEvent('Over_shop:hasEnteredMarker', currentZone)
+			TriggerEvent('irrp_shop:hasEnteredMarker', currentZone)
 		end
 
 		if not isInMarker and HasAlreadyEnteredMarker then
 			HasAlreadyEnteredMarker = false
-			TriggerEvent('Over_shop:hasExitedMarker', LastZone)
+			TriggerEvent('irrp_shop:hasExitedMarker', LastZone)
 		end
 		
 		if not isInMarker then
@@ -296,7 +296,7 @@ Citizen.CreateThread(function()
 end)
 
 function OpenBossAction(shopNumber)
-    ESX.TriggerServerCallback('Over_shop:getstatus', function(data)
+    ESX.TriggerServerCallback('irrp_shop:getstatus', function(data)
         
         ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'shop_boss_action', {
             title    = shopNumber.." | Shop " .. Locations[shopNumber].blip.name,
@@ -315,7 +315,7 @@ function OpenBossAction(shopNumber)
             elseif data.current.value == 'view' then
                 openInventoryShop(shopNumber)
             elseif data.current.value == 'deposit' then
-                ESX.TriggerServerCallback('Over_shop:depositmoney', function(deposit)
+                ESX.TriggerServerCallback('irrp_shop:depositmoney', function(deposit)
                     if deposit then
                         ESX.ShowNotification("~h~You have Collected ~g~$" .. tostring(deposit) .. "~w~ From you Shop!")
                         menu.close()
@@ -332,7 +332,7 @@ function OpenBossAction(shopNumber)
 end
 
 function openInventoryShop(shopNumber)
-    ESX.TriggerServerCallback('Over_shop:getinventory', function(inventory)
+    ESX.TriggerServerCallback('irrp_shop:getinventory', function(inventory)
 
         if inventory then
             local elements = {}
@@ -357,7 +357,7 @@ function openInventoryShop(shopNumber)
 
                     if count then
                         if count > 0 then
-                            ESX.TriggerServerCallback('Over_shop:putStock', function(success)
+                            ESX.TriggerServerCallback('irrp_shop:putStock', function(success)
                                 if success then
                                     ESX.ShowNotification("~h~You have add ~o~x" .. success.count .. " ~g~" .. success.item .. "~w~ To your shop!")
                                     menu3.close()
@@ -392,7 +392,7 @@ function openInventoryShop(shopNumber)
 end
 
 function openManagerMenu(shopNumber)
-    ESX.TriggerServerCallback('Over_shop:getstatus', function(data)
+    ESX.TriggerServerCallback('irrp_shop:getstatus', function(data)
         
         local elements = {
             {label = "Change Your Shop Name", value = "changename"},
@@ -416,7 +416,7 @@ function openManagerMenu(shopNumber)
             elseif data2.current.value == "changeprice" then
                 changePrice(shopNumber)
             elseif data2.current.value == "changestatus" then
-                ESX.TriggerServerCallback('Over_shop:setstatus', function(success)
+                ESX.TriggerServerCallback('irrp_shop:setstatus', function(success)
                     if success then
                         menu2.close()
                         openManagerMenu(shopNumber)
@@ -443,7 +443,7 @@ function changePrice(shopNumber)
 
         if count then
             if count > 0 then
-                ESX.TriggerServerCallback('Over_shop:setstatus', function(success)
+                ESX.TriggerServerCallback('irrp_shop:setstatus', function(success)
                     if success then
                         ESX.ShowNotification("~h~You have sussecfully put price to ~g~$" .. success)
                         menu3.close()
@@ -478,7 +478,7 @@ function openChangeNameMenu(shopNumber)
         end
 
         if string.len(trim1(data3.value)) >= 3 then
-            ESX.TriggerServerCallback('Over_shop:changename', function(changed)
+            ESX.TriggerServerCallback('irrp_shop:changename', function(changed)
 
                 if changed then
                     ESX.ShowNotification("~h~Change shop name to : ~g~" .. changed)
@@ -511,7 +511,7 @@ function BuyShopMenu(shopNumber)
         if data.current.value == "yes" then
             print('yes babe')
             Citizen.Wait(math.random(100, 500))
-            ESX.TriggerServerCallback('Over_shop:buyShop', function(success)
+            ESX.TriggerServerCallback('irrp_shop:buyShop', function(success)
 
                 if success then
                     ESX.ShowNotification("~h~Sussesfully buy ~g~" .. Locations[success].blip.name .. "(" .. success .. ")")
@@ -530,7 +530,7 @@ end
 
 function BuyShopItemsMenu()
     local data = {}
-    ESX.TriggerServerCallback('Over_shop:getbuyprices', function(items)
+    ESX.TriggerServerCallback('irrp_shop:getbuyprices', function(items)
         for k, v in pairs(items) do
             table.insert(data, {name = k, label = v.label, price = v.price, image = k})
         end
